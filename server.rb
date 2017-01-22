@@ -72,16 +72,17 @@ post "/items" do
     note: params[:note]
   }
   Items.add item
-  view_html("index")
+  redirect to("/items")
 end
 
 patch "/items/:id" do
+  id = params[:id].to_i
   Items.update({
-    id: params[:id].to_i,
+    id: id,
     name: params[:name],
     note: params[:note]
   })
-  redirect to("/items")
+  redirect to("/items/#{id}")
 end
 
 get "/api/items" do
