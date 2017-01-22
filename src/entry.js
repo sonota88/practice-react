@@ -14,15 +14,24 @@ function api(method, url, params, fn){
   $.post(url, _params).then(fn);
 }
 
+var ItemRow = React.createClass({
+  render: function(){
+    var item = this.props.item;
+    return (
+      <tr>
+        <td><a href={ "items/" + item.id }>{item.id}</a></td>
+        <td>{item.name}</td>
+        <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
+      </tr>
+    );
+  }
+});
+
 var ItemList = React.createClass({
   render: function() {
     var items = this.props.items.map((item)=>{
       return (
-        <tr>
-          <td><a href={ "items/" + item.id }>{item.id}</a></td>
-          <td>{item.name}</td>
-          <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
-        </tr>
+        <ItemRow item={item} key={item.id} />
       );
     });
     return (
