@@ -14,10 +14,20 @@ function api(method, url, params, fn){
   $.post(url, _params).then(fn);
 }
 
-var Hi = React.createClass({
+var ItemList = React.createClass({
   render: function() {
+    var items = this.props.items;
+    var item = items[0];
     return (
-      <p>Hi!</p>
+      <table>
+        <tbody>
+          <tr>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td><a href={ "edit?id=" + item.id }>edit</a></td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 });
@@ -25,12 +35,14 @@ var Hi = React.createClass({
 function index(){
   api("get", "/api/items", {}, (data)=>{
     puts(data);
+    ReactDOM.render(
+      <ItemList items={data.items} />,
+      document.getElementById('app')
+    );
   });
-  ReactDOM.render(<Hi />, document.getElementById('app'));
 }
 
 $(()=>{
-  console.log(location.href);
   if( /\/index.html$/.test(location.href) ){
     index();
   }else{
