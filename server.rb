@@ -2,29 +2,30 @@ require "json"
 require "sinatra"
 require "sinatra/reloader"
 
-$items = [
-  { id: 1, name: "foo", note: "note 1"},
-  { id: 2, name: "bar", note: "note 2"}
-]
-
 class Items
+
+  @@items = [
+    { id: 1, name: "foo", note: "note 1"},
+    { id: 2, name: "bar", note: "note 2"}
+  ]
+
   def self.get id
-    $items.find{|item|
+    @@items.find{|item|
       item[:id] == id
     }
   end
 
   def self.get_all
-    $items
+    @@items
   end
 
   def self.add item
-    $items << item
+    @@items << item
   end
 
   def self.max_id
-    id = $items[0][:id]
-    $items.each{|item|
+    id = @@items[0][:id]
+    @@items.each{|item|
       id = [item[:id], id].max
     }
     id
