@@ -12,6 +12,16 @@ def _api
   JSON.generate(result)
 end
 
+def get_item id
+  items = [
+    { id: 1, name: "foo", note: "note 1"},
+    { id: 2, name: "bar", note: "note 2"}
+  ]
+  items.find{|item|
+    item[:id] == id
+  }
+end
+
 get "/items" do
   view_html("index")
 end
@@ -34,7 +44,8 @@ end
 
 get "/api/items/:id" do
   _api do
-    item = { id: 1, name: "foo", note: "note 1"}
+    id = params[:id].to_i
+    item = get_item(id)
     {
       item: item
     }
