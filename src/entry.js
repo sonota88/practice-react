@@ -22,8 +22,20 @@ var ItemRow = React.createClass({
         <td><a href={ "items/" + item.id }>{item.id}</a></td>
         <td>{item.name}</td>
         <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
+        <td><button onClick={this.onClickDelete}>削除</button></td>
       </tr>
     );
+  },
+
+  onClickDelete: function(ev){
+    if( ! confirm("削除しますか？") ){
+      return;
+    }
+    var id = this.props.item.id;
+    var $form = $('<form method="POST"></form>')
+      .attr({ action: "/items/" + id })
+      .append('<input name="_method" value="delete" />');
+    $form.submit();
   }
 });
 

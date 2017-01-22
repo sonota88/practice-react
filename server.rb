@@ -30,6 +30,12 @@ class Items
     @@items[i] = item
   end
 
+  def self.delete id
+    @@items = @@items.reject{|it|
+      it[:id] == id
+    }
+  end
+
   def self.max_id
     id = @@items[0][:id]
     @@items.each{|item|
@@ -83,6 +89,12 @@ patch "/items/:id" do
     note: params[:note]
   })
   redirect to("/items/#{id}")
+end
+
+delete "/items/:id" do
+  id = params[:id].to_i
+  Items.delete(id)
+  redirect to("/items")
 end
 
 get "/api/items" do
