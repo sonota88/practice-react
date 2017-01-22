@@ -1,0 +1,10 @@
+*~
+
+/node_modules/
+
+/src_babeled/
+/dist/
+/public/dist
+
+/.bundle/
+/vendor/bundle/
