@@ -35,6 +35,24 @@ get "/items/new" do
   view_html("new")
 end
 
+def max_id
+  id = $items[0][:id]
+  $items.each{|item|
+    id = [item[:id], id].max
+  }
+  id
+end
+
+post "/items" do
+  item = {
+    id: max_id() + 1,
+    name: params[:name],
+    note: params[:note]
+  }
+  $items << item
+  view_html("index")
+end
+
 get "/api/items" do
   _api do
     {
