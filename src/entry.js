@@ -56,6 +56,22 @@ var Item = React.createClass({
   }
 });
 
+var ItemForm = React.createClass({
+  render: function(){
+    return (
+      <form method="POST" action="/items">
+        id: <input type="text" name="id" readOnly={true} />
+        <br />
+        name: <input type="text" name="name" />
+        <br />
+        note: <textarea name="note"></textarea>
+        <br />
+        <button>作成</button>
+      </form>
+    );
+  }
+});
+
 function index(){
   api("get", "/api/items", {}, (data)=>{
     puts(data);
@@ -78,11 +94,21 @@ function show(){
   });
 }
 
+function new_(){
+  var item = {};
+  ReactDOM.render(
+    <ItemForm item={item} />,
+    document.getElementById('app')
+  );
+}
+
 $(()=>{
   if( /\/items$/.test(location.href) ){
     index();
   }else if( /\/items\/\d+$/.test(location.href) ){
     show();
+  }else if( /\/items\/new$/.test(location.href) ){
+    new_();
   }else{
     throw new Error("Invalid URL");
   }

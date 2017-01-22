@@ -31,6 +31,10 @@ get "/items/:id" do
   view_html("show")
 end
 
+get "/items/new" do
+  view_html("new")
+end
+
 get "/api/items" do
   _api do
     {
