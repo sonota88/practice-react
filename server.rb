@@ -2,6 +2,11 @@ require "json"
 require "sinatra"
 require "sinatra/reloader"
 
+$items = [
+  { id: 1, name: "foo", note: "note 1"},
+  { id: 2, name: "bar", note: "note 2"}
+]
+
 def view_html name
   File.read "views/#{name}.html"
 end
@@ -13,11 +18,7 @@ def _api
 end
 
 def get_item id
-  items = [
-    { id: 1, name: "foo", note: "note 1"},
-    { id: 2, name: "bar", note: "note 2"}
-  ]
-  items.find{|item|
+  $items.find{|item|
     item[:id] == id
   }
 end
@@ -32,12 +33,8 @@ end
 
 get "/api/items" do
   _api do
-    items = [
-      { id: 1, name: "foo", note: "note 1"},
-      { id: 2, name: "bar", note: "note 2"}
-    ]
     {
-      items: items
+      items: $items
     }
   end
 end
