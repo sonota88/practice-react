@@ -16,16 +16,19 @@ function api(method, url, params, fn){
 
 var ItemList = React.createClass({
   render: function() {
-    var items = this.props.items;
-    var item = items[0];
+    var items = this.props.items.map((item)=>{
+      return (
+        <tr>
+          <td><a href={ "items/" + item.id }>{item.id}</a></td>
+          <td>{item.name}</td>
+          <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
+        </tr>
+      );
+    });
     return (
       <table>
         <tbody>
-          <tr>
-            <td><a href={ "items/" + item.id }>{item.id}</a></td>
-            <td>{item.name}</td>
-            <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
-          </tr>
+          {items}
         </tbody>
       </table>
     );
