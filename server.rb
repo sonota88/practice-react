@@ -7,6 +7,30 @@ $items = [
   { id: 2, name: "bar", note: "note 2"}
 ]
 
+class Items
+  def self.get id
+    $items.find{|item|
+      item[:id] == id
+    }
+  end
+
+  def self.get_all
+    $items
+  end
+
+  def self.add item
+    $items << item
+  end
+
+  def self.max_id
+    id = $items[0][:id]
+    $items.each{|item|
+      id = [item[:id], id].max
+    }
+    id
+  end
+end
+
 def view_html name
   File.read "views/#{name}.html"
 end
@@ -15,12 +39,6 @@ def _api
   content_type :json
   result = yield
   JSON.generate(result)
-end
-
-def get_item id
-  $items.find{|item|
-    item[:id] == id
-  }
 end
 
 get "/items" do
@@ -35,28 +53,20 @@ get "/items/new" do
   view_html("new")
 end
 
-def max_id
-  id = $items[0][:id]
-  $items.each{|item|
-    id = [item[:id], id].max
-  }
-  id
-end
-
 post "/items" do
   item = {
-    id: max_id() + 1,
+    id: Items.max_id + 1,
     name: params[:name],
     note: params[:note]
   }
-  $items << item
+  Items.add item
   view_html("index")
 end
 
 get "/api/items" do
   _api do
     {
-      items: $items
+      items: Items.get_all
     }
   end
 end
@@ -64,7 +74,7 @@ end
 get "/api/items/:id" do
   _api do
     id = params[:id].to_i
-    item = get_item(id)
+    item = Items.get(id)
     {
       item: item
     }
