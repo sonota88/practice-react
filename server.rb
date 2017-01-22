@@ -23,6 +23,13 @@ class Items
     @@items << item
   end
 
+  def self.update item
+    i = @@items.index{|it|
+      it[:id] == item[:id]
+    }
+    @@items[i] = item
+  end
+
   def self.max_id
     id = @@items[0][:id]
     @@items.each{|item|
@@ -54,6 +61,10 @@ get "/items/new" do
   view_html("new")
 end
 
+get "/items/:id/edit" do
+  view_html("edit")
+end
+
 post "/items" do
   item = {
     id: Items.max_id + 1,
@@ -62,6 +73,15 @@ post "/items" do
   }
   Items.add item
   view_html("index")
+end
+
+patch "/items/:id" do
+  Items.update({
+    id: params[:id].to_i,
+    name: params[:name],
+    note: params[:note]
+  })
+  redirect to("/items")
 end
 
 get "/api/items" do

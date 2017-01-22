@@ -70,13 +70,15 @@ var Item = React.createClass({
 
 var ItemForm = React.createClass({
   render: function(){
+    var item = this.props.item;
     return (
-      <form method="POST" action="/items">
-        id: <input type="text" name="id" readOnly={true} />
+      <form method="POST" action={this.props.action}>
+        <input type="hidden" name="_method" value={this.props.method} />
+        id: <input type="text" name="id" readOnly={true} defaultValue={item.id} />
         <br />
-        name: <input type="text" name="name" />
+        name: <input type="text" name="name" defaultValue={item.name} />
         <br />
-        note: <textarea name="note"></textarea>
+        note: <textarea name="note"defaultValue={item.note} />
         <br />
         <button>作成</button>
       </form>
@@ -109,9 +111,20 @@ function show(){
 function new_(){
   var item = {};
   ReactDOM.render(
-    <ItemForm item={item} />,
+    <ItemForm item={item} method={"post"} action={ "/items" } />,
     document.getElementById('app')
   );
+}
+
+function edit(){
+  location.href.match(/\/(\d+?)\/edit$/);
+  var id = parseInt(RegExp.$1, 10);
+  api("get", "/api/items/" + id, {}, (data)=>{
+    ReactDOM.render(
+      <ItemForm item={data.item} method={"patch"} action={ "/items/" + id } />,
+      document.getElementById('app')
+    );
+  });
 }
 
 $(()=>{
@@ -121,6 +134,8 @@ $(()=>{
     show();
   }else if( /\/items\/new$/.test(location.href) ){
     new_();
+  }else if( /\/items\/\d+\/edit$/.test(location.href) ){
+    edit();
   }else{
     throw new Error("Invalid URL");
   }
