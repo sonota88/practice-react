@@ -24,7 +24,7 @@ var ItemList = React.createClass({
           <tr>
             <td>{item.id}</td>
             <td>{item.name}</td>
-            <td><a href={ "edit?id=" + item.id }>edit</a></td>
+            <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
           </tr>
         </tbody>
       </table>
@@ -43,7 +43,7 @@ function index(){
 }
 
 $(()=>{
-  if( /\/index.html$/.test(location.href) ){
+  if( /\/items$/.test(location.href) ){
     index();
   }else{
     throw new Error("Invalid URL");

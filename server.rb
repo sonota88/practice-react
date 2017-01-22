@@ -2,14 +2,18 @@ require "json"
 require "sinatra"
 require "sinatra/reloader"
 
+def view_html name
+  File.read "views/#{name}.html"
+end
+
 def _api
   content_type :json
   result = yield
   JSON.generate(result)
 end
 
-get "/hello" do
-  "hello #{Time.now}"
+get "/items" do
+  view_html("index")
 end
 
 get "/api/items" do
