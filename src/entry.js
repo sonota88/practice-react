@@ -22,9 +22,33 @@ var ItemList = React.createClass({
       <table>
         <tbody>
           <tr>
-            <td>{item.id}</td>
+            <td><a href={ "items/" + item.id }>{item.id}</a></td>
             <td>{item.name}</td>
             <td><a href={ "items/" + item.id + "/edit" }>edit</a></td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  }
+});
+
+var Item = React.createClass({
+  render: function() {
+    var item = this.props.item;
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <th>id</th>
+            <td>{item.id}</td>
+          </tr>
+          <tr>
+            <th>name</th>
+            <td>{item.name}</td>
+          </tr>
+          <tr>
+            <th>note</th>
+            <td>{item.note}</td>
           </tr>
         </tbody>
       </table>
@@ -42,9 +66,23 @@ function index(){
   });
 }
 
+function show(){
+  location.href.match(/\/(\d+)$/);
+  var id = parseInt(RegExp.$1, 10);
+  api("get", "/api/items/" + id, {}, (data)=>{
+    puts(data);
+    ReactDOM.render(
+      <Item item={data.item} />,
+      document.getElementById('app')
+    );
+  });
+}
+
 $(()=>{
   if( /\/items$/.test(location.href) ){
     index();
+  }else if( /\/items\/\d+$/.test(location.href) ){
+    show();
   }else{
     throw new Error("Invalid URL");
   }

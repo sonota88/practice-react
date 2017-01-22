@@ -16,6 +16,10 @@ get "/items" do
   view_html("index")
 end
 
+get "/items/:id" do
+  view_html("show")
+end
+
 get "/api/items" do
   _api do
     items = [
@@ -24,6 +28,15 @@ get "/api/items" do
     ]
     {
       items: items
+    }
+  end
+end
+
+get "/api/items/:id" do
+  _api do
+    item = { id: 1, name: "foo", note: "note 1"}
+    {
+      item: item
     }
   end
 end
